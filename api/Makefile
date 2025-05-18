@@ -5,7 +5,7 @@ exit_venv:
 	deactivate
 
 run_dependencies:
-	pip install -r requirements.txt
+	pip install -r ./../requirements.txt
 
 migration_up:
 	./worker/scripts/database/migration_up.sh

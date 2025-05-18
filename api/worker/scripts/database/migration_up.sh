@@ -12,7 +12,7 @@ for file in $(ls $SQL_DIR/*.sql | sort); do
 
   echo "▶ Executing $file..."
   sqlite3 "$DB_PATH" < "$file"
-  sleep 1
+  sleep 3
 done
 
 echo "✅ All migrations applied."

@@ -1,4 +1,5 @@
 from pathlib import Path
+from api.worker.consumer.utils.env import get_env_variable
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -7,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-w*v-ggqb)73li4e6*ru_n#3!r5$7c+5hrq5b78oq(8h^cl*-r$"
+SECRET_KEY = get_env_variable("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -39,6 +40,22 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+CORS_ALLOW_HEADERS = [
+    'Content-Type',
+    'Authorization',
+    'AppLanguage',
+    'UserId',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
 ROOT_URLCONF = "main.urls"
 
 TEMPLATES = [
@@ -59,8 +76,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "main.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": get_env_variable('REDIS_LOCATION'),
+        "KEY_PREFIX": "imdb",
+        "OPTIONS": {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_KWARGS': {
+                'max_connections': 100,
+                'retry_on_timeout': True,
+            }
+        }
+    }
+}
 
 DATABASES = {
     "default": {
